@@ -61,4 +61,15 @@ Ver las especificaciones del contenedor Oracle, dentro del contenedor
 lsnrctl status
 ```
 
+Ver la IP del contenedor para el datalink de host
+
+```
+sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nombre-del-contenedor
+```
+
+Ejemplo:
+```
+sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' oracle-xe-3-DB-C
+```
+
 by @CrisRLoera

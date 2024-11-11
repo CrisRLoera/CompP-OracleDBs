@@ -9,7 +9,6 @@ CREATE TABLE emp (
   comm NUMBER(7,2),
   deptno NUMBER(2,0),
   CONSTRAINT pk_emp PRIMARY KEY (empno),
-  CONSTRAINT fk_deptno FOREIGN KEY (deptno) REFERENCES dept (deptno)
 );
 
 -- Insertar datos en la tabla EMP

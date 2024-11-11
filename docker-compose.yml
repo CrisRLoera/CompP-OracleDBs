@@ -1,0 +1,67 @@
+services:
+  oracle-xe-1:
+    image: gvenzl/oracle-xe:21-slim
+    container_name: oracle-xe-1-DB-A
+    environment:
+      - ORACLE_PASSWORD=StrongPwd123
+    ports:
+      - "1521:1521"
+    volumes:
+      - xe1_data:/opt/oracle/oradata
+      - ./sql-scripts:/container-entrypoint-initdb.d # Monta la carpeta con los scripts
+    networks:
+      - ora-net
+    command: >
+      sh -c "
+        /opt/oracle/runOracle.sh &&
+        sqlplus / as sysdba @/container-entrypoint-initdb.d/init-users.sql &&
+        sqlplus / as sysdba @/container-entrypoint-initdb.d/dept.sql &&
+        tail -f /dev/null
+      "
+
+  oracle-xe-2:
+    image: gvenzl/oracle-xe:21-slim
+    container_name: oracle-xe-2-DB-B
+    environment:
+      - ORACLE_PASSWORD=StrongPwd456
+    ports:
+      - "1522:1521"
+    volumes:
+      - xe2_data:/opt/oracle/oradata
+      - ./sql-scripts:/container-entrypoint-initdb.d
+    networks:
+      - ora-net
+    command: >
+      sh -c "
+        /opt/oracle/runOracle.sh &&
+        sqlplus / as sysdba @/container-entrypoint-initdb.d/init-users.sql &&
+        sqlplus / as sysdba @/container-entrypoint-initdb.d/emp.sql &&
+        tail -f /dev/null
+      "
+
+  oracle-xe-3:
+    image: gvenzl/oracle-xe:21-slim
+    container_name: oracle-xe-3-DB-C
+    environment:
+      - ORACLE_PASSWORD=StrongPwd789
+    ports:
+      - "1523:1521"
+    volumes:
+      - xe3_data:/opt/oracle/oradata
+      - ./sql-scripts:/container-entrypoint-initdb.d
+    networks:
+      - ora-net
+    command: >
+      sh -c "
+        /opt/oracle/runOracle.sh &&
+        sqlplus / as sysdba @/container-entrypoint-initdb.d/init-users.sql &&
+        tail -f /dev/null
+      "
+
+volumes:
+  xe1_data:
+  xe2_data:
+  xe3_data:
+
+networks:
+  ora-net:
